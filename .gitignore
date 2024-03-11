@@ -4,8 +4,8 @@
 
 ####################
 # To ignore the different connection strings:
-Bakery/appsettings.Development.json
-Bakery/appsettings.json/appsettings.Development.json
+appsettings.Development.json
+appsettings.json/appsettings.Development.json
 
 
 ### DotnetCore ###
