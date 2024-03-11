@@ -1,6 +1,13 @@
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudio,rider,dotnetcore,macos,windows
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudio,rider,dotnetcore,macos,windows
 
+
+####################
+# To ignore the different connection strings:
+Bakery/appsettings.Development.json
+Bakery/appsettings.json/appsettings.Development.json
+
+
 ### DotnetCore ###
 # .NET Core build folders
 bin/
