@@ -1,4 +1,4 @@
-# A Consolidation
+# A. Consolidation
 
 - Removing route and packet from entity 'Deliveries', because they seem redundant.
 - Adding delivery_place to entity 'Orders', as this is mentioned by the manager in assignment 2. 
