@@ -5,13 +5,8 @@ namespace Bakery.Context;
 
 public class MyDbContext : DbContext
 {
-    private readonly IConfiguration _configuration;
-    
-    public MyDbContext(IConfiguration configuration)
-    {
-        _configuration = configuration;
-    }
-    
+    public MyDbContext(DbContextOptions<MyDbContext> options) : base(options) { }
+
     internal DbSet<Orders> Orders{ get; set; }
     internal DbSet<Deliveries> Deliveries{ get; set; }
     internal DbSet<Supermarkets> Supermarkets{ get; set; }
@@ -22,9 +17,6 @@ public class MyDbContext : DbContext
     internal DbSet<Batches> Batches{ get; set; }
     internal DbSet<Ingredients> Ingredients{ get; set; }
     internal DbSet<BatchIngredient> IngredientBatches{ get; set; }
-    
-    protected override void OnConfiguring(DbContextOptionsBuilder options)
-        => options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));  
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
