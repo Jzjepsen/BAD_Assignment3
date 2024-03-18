@@ -14,6 +14,7 @@ public class IngredientsController : ControllerBase
     {
         _context = context;
     }
+    
     // actions
     [HttpGet]
     public IActionResult GetAllIngredients()
@@ -21,6 +22,22 @@ public class IngredientsController : ControllerBase
         var ingredient = _context.Ingredients.ToList();
         return Ok(ingredient);
     }
+    
+    //minimum query #1 from assignment 2
+    [HttpGet("all-quantities")]
+    public IActionResult GetAllIngredientsWithQuantities()
+    {
+        var ingredients = _context.Ingredients
+            .Select(i => new IngredientQuantityDto
+            {
+                Name = i.Name,
+                Quantity = i.Quantity
+            })
+            .ToList();
+
+        return Ok(ingredients);
+    }
+
     
     [HttpGet("{id}")]
     public IActionResult GetIngredientById(int id)
