@@ -12,7 +12,7 @@
 - Agreed on N-to-N multiplicity from 'BakingGoods' to 'Batches'
 - Agreed on having an ID on entity 'Ingredients'
 - Agreed on changing attribute stock to quantity in entity 'Ingredients'
-- Agreed on creating attribute 'Address' as composite attribute.
+- Agreed on creating attribute 'Address' as normal attribute instead of a composite attribute.
 
 Generally the ER diagram has been cut to the bone, to focus on the essentials of the system, the customer is requesting. 
 
