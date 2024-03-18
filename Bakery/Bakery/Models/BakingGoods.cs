@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Bakery.Models;
 
 public class BakingGoods
 {
+    [Key]
     public int BakingGoodId { get; set; }
     public string Name { get; set; }
     public int Price { get; set; }

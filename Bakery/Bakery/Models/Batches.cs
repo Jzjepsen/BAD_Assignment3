@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Bakery.Models;
 
 public class Batches
 {
+    [Key]
     public int BatchId { get; set; }
     public TimeOnly StartTime { get; set; }
     public TimeOnly FinishTime { get; set; }
