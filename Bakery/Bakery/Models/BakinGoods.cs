@@ -7,6 +7,6 @@ public class BakingGoods
     public int Price { get; set; }
     public int Quantity { get; set; }
     
-    public ICollection<OrderBakingGood> OrderBakingGoods { get; set; }
-    public ICollection<BakingGoodBatch> BakingGoodBatches { get; set; }
+    public List<OrderBakingGood> OrderBakingGoods { get; set; }
+    public List<BakingGoodBatch> BakingGoodBatches { get; set; }
 }

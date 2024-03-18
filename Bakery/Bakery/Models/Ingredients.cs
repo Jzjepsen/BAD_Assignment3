@@ -6,5 +6,5 @@ public class Ingredients
     public string Name { get; set; }
     public int Quantity { get; set; }
     
-    public ICollection<BatchIngredient> BatchIngredients { get; set; }
+    public List<BatchIngredient> BatchIngredients { get; set; }
 }

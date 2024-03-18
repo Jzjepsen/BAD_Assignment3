@@ -7,6 +7,6 @@ public class Batches
     public TimeOnly FinishTime { get; set; }
     public TimeOnly ScheduledFinishTime { get; set; }
     
-    public ICollection<BakingGoodBatch> BakingGoodBatches { get; set; }
-    public ICollection<BatchIngredient> BatchIngredients { get; set; }
+    public List<BakingGoodBatch> BakingGoodBatches { get; set; }
+    public List<BatchIngredient> BatchIngredients { get; set; }
 }

@@ -8,6 +8,6 @@ public class Orders
     public Address DeliveryPlace { get; set; }
     public DateOnly Date { get; set; }
     
-    public ICollection<OrderBakingGood> OrderBakingGoods { get; set; }
-    public ICollection<Deliveries> Deliveries { get; set; }
+    public List<OrderBakingGood> OrderBakingGoods { get; set; }
+    public List<Deliveries> Deliveries { get; set; }
 }

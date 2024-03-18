@@ -6,5 +6,5 @@ public class Supermarkets
     public string Name { get; set; }
     public Address Address { get; set; }
     
-    public ICollection<Deliveries> Deliveres { get; set; }
+    public List<Deliveries> Deliveres { get; set; }
 }
