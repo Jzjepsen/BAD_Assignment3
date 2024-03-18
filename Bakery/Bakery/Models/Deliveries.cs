@@ -1,9 +1,12 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Bakery.Models;
 
 public class Deliveries
 {
+    [Key]
     public int TrackId { get; set; }
-    public Address Location { get; set; }
+    public string Location { get; set; }
 
     public int OrderId { get; set; }
     public Orders Order { get; set; }
