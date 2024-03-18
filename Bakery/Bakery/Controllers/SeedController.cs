@@ -1,4 +1,6 @@
+using Bakery.Context;
 using Microsoft.AspNetCore.Mvc;
+using Bakery.Data;
 
 namespace Bakery.Controllers;
 
@@ -7,16 +9,19 @@ namespace Bakery.Controllers;
 public class SeedController : ControllerBase
 {
     private readonly ILogger<SeedController> _logger;
+    private readonly MyDbContext _context;
     
-    public SeedController(ILogger<SeedController> logger)
+    public SeedController(ILogger<SeedController> logger, MyDbContext context)
     {
         _logger = logger;
+        _context = context;
     }
-    
+
     
     [HttpPut(Name = "Seed")]
     public void Put()
     {
-        // SeedData()
+        var seedData = new SeedData();
+        seedData.Seed(_context);
     }
 }
