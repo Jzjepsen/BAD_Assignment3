@@ -5,8 +5,13 @@ namespace Bakery.Data
 {
     public class SeedData
     {
+        public SeedData()
+        { }
+
         public void Seed(MyDbContext db)
         {
+            //Vi skal have sat id'er for alt
+
             var order1 = new Orders { Date = new DateOnly(), DeliveryPlace = "" };
             var order2 = new Orders { Date = new DateOnly(), DeliveryPlace = "" };
 
