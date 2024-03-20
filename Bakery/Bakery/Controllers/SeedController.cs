@@ -1,6 +1,6 @@
-using Bakery.Context;
 using Microsoft.AspNetCore.Mvc;
 using Bakery.Data;
+using Bakery.Context;
 
 namespace Bakery.Controllers;
 
@@ -10,10 +10,10 @@ public class SeedController : ControllerBase
 {
     private readonly ILogger<SeedController> _logger;
     private readonly MyDbContext _context;
-    
+
     public SeedController(ILogger<SeedController> logger, MyDbContext context)
     {
-        _logger = logger;
+        _logger = logger;    
         _context = context;
     }
 

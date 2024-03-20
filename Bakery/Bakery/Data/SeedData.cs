@@ -5,6 +5,9 @@ namespace Bakery.Data
 {
     public class SeedData
     {
+        public SeedData()
+        { }
+
         public void Seed(MyDbContext db)
         {
             // Independent entities
