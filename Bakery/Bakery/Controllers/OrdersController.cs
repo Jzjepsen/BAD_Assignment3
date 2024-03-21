@@ -1,5 +1,6 @@
 using Bakery.Context;
 using Bakery.DTOs;
+using Bakery.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bakery.Controllers;
@@ -91,5 +92,31 @@ public class OrdersController : ControllerBase
             return Ok(bakingGoods);
         }
 
-   
+    [HttpPost("new-order")]
+    public IActionResult CreateNewOrder([FromBody] OrdersDto ordersDto)
+    {
+        // Step 2: Validate the received DTO
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        // Step 3: Create a new Orders entity and map the properties from the DTO
+        var newOrder = new Orders
+        {
+            DeliveryPlace = ordersDto.DeliveryPlace,
+            Date = ordersDto.Date,
+        };
+
+        // Step 4: Add the new entity to the Orders DbSet
+        _context.Orders.Add(newOrder);
+
+        // Step 5: Save changes to the database
+        _context.SaveChanges();
+
+        // Step 6: Return a response
+        // Using nameof(GetOrderDetails) to redirect to the details of the newly created order
+        // Assuming GetOrderDetails is a suitable endpoint to show the order's details
+        return CreatedAtAction(nameof(GetOrderDetails), new { id = newOrder.OrderId }, newOrder);
+    }
 }
