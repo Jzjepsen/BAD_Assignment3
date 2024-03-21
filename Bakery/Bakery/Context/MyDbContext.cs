@@ -16,7 +16,9 @@ public class MyDbContext : DbContext
     internal DbSet<Batches> Batches{ get; set; }
     internal DbSet<Ingredients> Ingredients{ get; set; }
     internal DbSet<BatchIngredient> BatchIngredients{ get; set; }
-    
+    internal DbSet<Allergen> Allergens { get; set; }
+    internal DbSet<IngredientAllergen> IngredientAllergens { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -68,5 +70,19 @@ public class MyDbContext : DbContext
            .HasForeignKey(e=>e.BakingGoodId)
            .OnDelete(DeleteBehavior.Cascade);
 
+       
+       // ingredients Allergens
+       modelBuilder.Entity<IngredientAllergen>()
+           .HasKey(ia => new { ia.IngredientId, ia.AllergenId });
+
+       modelBuilder.Entity<IngredientAllergen>()
+           .HasOne(ia => ia.Ingredient)
+           .WithMany(i => i.IngredientAllergens)
+           .HasForeignKey(ia => ia.IngredientId);
+
+       modelBuilder.Entity<IngredientAllergen>()
+           .HasOne(ia => ia.Allergen)
+           .WithMany(a => a.IngredientAllergens)
+           .HasForeignKey(ia => ia.AllergenId);
     }
 }

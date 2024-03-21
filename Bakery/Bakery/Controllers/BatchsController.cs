@@ -24,7 +24,7 @@ public class BatchsController : ControllerBase
 
         var ingredients = _context.BatchIngredients
             .Where(e => e.BatchId == id)
-            .Select(e => new IngredientQuantityDto
+            .Select(e => new IngredientDto
             {
                 Name = e.Ingredient.Name,
                 Quantity = e.Ingredient.Quantity

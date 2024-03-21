@@ -1,10 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Bakery.Controllers;
+namespace Bakery.DTOs;
 
-public class IngredientDto
+public class IngredientQuantityDto
 {
-    public string Name { get; set; }
     [Range(0, int.MaxValue, ErrorMessage = "Quantity must be a non-negative number.")]
     public int Quantity { get; set; }
 }

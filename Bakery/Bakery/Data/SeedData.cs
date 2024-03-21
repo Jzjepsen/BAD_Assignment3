@@ -10,46 +10,113 @@ namespace Bakery.Data
 
         public void Seed(MyDbContext db)
         {
-            // Independent entities
-            
-            var supermarket1 = new Supermarkets { Name = "Netto", Address = "Thorvaldsensgade 22" };
-            var supermarket2 = new Supermarkets { Name = "Meny", Address = "Skanderborgvej 18" };
-            var supermarket3 = new Supermarkets { Name = "Rema 1000", Address = "Frederiksgade 82" };
-            var supermarket4 = new Supermarkets { Name = "Føtex", Address = "Frederiks Allé 22" };
-            var supermarket5 = new Supermarkets { Name = "Coop365", Address = "Vestergade 55B" };
+            // Supermarkets
+            AddSupermarketIfNotExists(db, new Supermarkets { Name = "Netto", Address = "Thorvaldsensgade 22" });
+            AddSupermarketIfNotExists(db, new Supermarkets { Name = "Netto", Address = "Thorvaldsensgade 22" });
+            AddSupermarketIfNotExists(db, new Supermarkets { Name = "Meny", Address = "Skanderborgvej 18" });
+            AddSupermarketIfNotExists(db, new Supermarkets { Name = "Rema 1000", Address = "Frederiksgade 82" });
+            AddSupermarketIfNotExists(db, new Supermarkets { Name = "Føtex", Address = "Frederiks Allé 22" });
+            AddSupermarketIfNotExists(db, new Supermarkets { Name = "Coop365", Address = "Vestergade 55B" });
+            db.SaveChanges();
 
-            db.Supermarkets.Add(supermarket1);
-            db.Supermarkets.Add(supermarket2);
-            db.Supermarkets.Add(supermarket3);
-            db.Supermarkets.Add(supermarket4);
-            db.Supermarkets.Add(supermarket5);
-            
-            var ingredient1 = new Ingredients { Name = "Flour", Quantity = 100 };
-            var ingredient2 = new Ingredients { Name = "Sugar", Quantity = 200 };
-            var ingredient3 = new Ingredients { Name = "Butter", Quantity = 150 };
-            var ingredient4 = new Ingredients { Name = "Eggs", Quantity = 300 };
-            var ingredient5 = new Ingredients { Name = "Milk", Quantity = 200 };
+            void AddSupermarketIfNotExists(MyDbContext db, Supermarkets supermarket)
+            {
+                if (!db.Supermarkets.Any(s => s.Address == supermarket.Address))
+                {
+                    db.Supermarkets.Add(supermarket);
+                }
+            }
 
-            db.Ingredients.Add(ingredient1);
-            db.Ingredients.Add(ingredient2);
-            db.Ingredients.Add(ingredient3);
-            db.Ingredients.Add(ingredient4);
-            db.Ingredients.Add(ingredient5);
+            // Seeding allergens Migration1
+            var allergenGluten = new Allergen { Name = "Flour" };
+            var allergenEggs = new Allergen { Name = "Eggs" };
+            var allergenDairy = new Allergen { Name = "Milk" };
+            var allergenNuts = new Allergen { Name = "Nuts" };
             
-            var order1 = new Orders { Date = new DateOnly(2023, 1, 1), DeliveryPlace = "Aarhus" };
-            var order2 = new Orders { Date = new DateOnly(2023, 1, 2), DeliveryPlace = "Aarhus" };
-            var order3 = new Orders { Date = new DateOnly(2023, 1, 3), DeliveryPlace = "Aarhus" };
-            var order4 = new Orders { Date = new DateOnly(2023, 1, 4), DeliveryPlace = "Aarhus" };
-            var order5 = new Orders { Date = new DateOnly(2023, 1, 5), DeliveryPlace = "Aarhus" };
+            addAllergenIfNotExists(db, allergenGluten);
+            addAllergenIfNotExists(db, allergenEggs);
+            addAllergenIfNotExists(db, allergenDairy);
+            addAllergenIfNotExists(db, allergenNuts);
+            db.SaveChanges();
 
-            db.Orders.Add(order1);
-            db.Orders.Add(order2);
-            db.Orders.Add(order3);
-            db.Orders.Add(order4);
-            db.Orders.Add(order5);
-            
+            void addAllergenIfNotExists(MyDbContext db, Allergen allergen)
+            {
+                if (!db.Allergens.Any(a => a.Name == allergen.Name))
+                {
+                    db.Allergens.Add(allergen);
+                }
+            }
+
             db.SaveChanges();
             
+            // Seeding ingredients with validation
+            AddIngredientIfNotExists(db, new Ingredients { Name = "Flour", Quantity = 100 });
+            AddIngredientIfNotExists(db, new Ingredients { Name = "Sugar", Quantity = 200 });
+            AddIngredientIfNotExists(db, new Ingredients { Name = "Butter", Quantity = 150 });
+            AddIngredientIfNotExists(db, new Ingredients { Name = "Eggs", Quantity = 300 });
+            AddIngredientIfNotExists(db, new Ingredients { Name = "Milk", Quantity = 200 });
+            AddIngredientIfNotExists(db, new Ingredients { Name = "Nuts", Quantity = 4000 });
+
+            db.SaveChanges();
+            
+            void AddIngredientIfNotExists(MyDbContext db, Ingredients ingredient)
+            {
+                if (!db.Ingredients.Any(i => i.Name == ingredient.Name))
+                {
+                    db.Ingredients.Add(ingredient);
+                }
+                else
+                {
+                    // Optionally, update the quantity of existing ingredients
+                    var existingIngredient = db.Ingredients.FirstOrDefault(i => i.Name == ingredient.Name);
+                    if (existingIngredient != null)
+                    {
+                        existingIngredient.Quantity += ingredient.Quantity;
+                    }
+                }
+            }
+            
+            // associate allergens w. ingredients
+            AssociateIngredientAllergen(db, "Flour", "Flour");
+            AssociateIngredientAllergen(db, "Eggs", "Eggs");
+            AssociateIngredientAllergen(db, "Milk", "Milk");
+            AssociateIngredientAllergen(db, "Nuts", "Nuts");
+
+            void AssociateIngredientAllergen(MyDbContext db, string ingredientName, string allergenName)
+            {
+                var ingredient = db.Ingredients.FirstOrDefault(i => i.Name == ingredientName);
+                var allergen = db.Allergens.FirstOrDefault(a => a.Name == allergenName);
+
+                if (ingredient != null && allergen != null)
+                {
+                    var exists = db.IngredientAllergens.Any(ia =>
+                        ia.IngredientId == ingredient.IngredientId && ia.AllergenId == allergen.AllergenId);
+                    if (!exists)
+                    {
+                        db.IngredientAllergens.Add(new IngredientAllergen
+                        {
+                            IngredientId = ingredient.IngredientId,
+                            AllergenId = allergen.AllergenId
+                        });
+                    }
+                }
+            }
+            
+            AddOrderIfNotExists(db, new Orders { Date = new DateOnly(2023, 1, 1), DeliveryPlace = "Aarhus" });
+            AddOrderIfNotExists(db, new Orders { Date = new DateOnly(2023, 1, 2), DeliveryPlace = "Aarhus" });
+            AddOrderIfNotExists(db, new Orders { Date = new DateOnly(2023, 1, 3), DeliveryPlace = "Aarhus" });
+            AddOrderIfNotExists(db, new Orders { Date = new DateOnly(2023, 1, 4), DeliveryPlace = "Aarhus" });
+            AddOrderIfNotExists(db, new Orders { Date = new DateOnly(2023, 1, 5), DeliveryPlace = "Aarhus" });
+
+            db.SaveChanges();
+            
+            void AddOrderIfNotExists(MyDbContext db, Orders order)
+            {
+                if (!db.Orders.Any(o => o.Date == order.Date && o.DeliveryPlace == order.DeliveryPlace))
+                {
+                    db.Orders.Add(order);
+                }
+            }
             // Entities dependent on independent entities
 
             var bakingGood1 = new BakingGoods { Name = "Bread", Price = 10, Quantity = 100 };
@@ -78,17 +145,23 @@ namespace Bakery.Data
             
             db.SaveChanges();
             
-            var delivery1 = new Deliveries { Location = "Aarhus", OrderId = 1, SupermarketId = 1 };
-            var delivery2 = new Deliveries { Location = "Aarhus", OrderId = 2, SupermarketId = 2 };
-            var delivery3 = new Deliveries { Location = "Aarhus", OrderId = 3, SupermarketId = 3 };
-            var delivery4 = new Deliveries { Location = "Aarhus", OrderId = 4, SupermarketId = 4 };
-            var delivery5 = new Deliveries { Location = "Aarhus", OrderId = 5, SupermarketId = 5 };
+            // Seeding deliveries with validation
+            AddDeliveryIfNotExists(db, new Deliveries { Location = "Aarhus", OrderId = 1, SupermarketId = 1 });
+            AddDeliveryIfNotExists(db, new Deliveries { Location = "Aarhus", OrderId = 2, SupermarketId = 2 });
+            AddDeliveryIfNotExists(db, new Deliveries { Location = "Aarhus", OrderId = 3, SupermarketId = 3 });
+            AddDeliveryIfNotExists(db, new Deliveries { Location = "Aarhus", OrderId = 4, SupermarketId = 4 });
+            AddDeliveryIfNotExists(db, new Deliveries { Location = "Aarhus", OrderId = 5, SupermarketId = 5 });
 
-            db.Deliveries.Add(delivery1);
-            db.Deliveries.Add(delivery2);
-            db.Deliveries.Add(delivery3);
-            db.Deliveries.Add(delivery4);
-            db.Deliveries.Add(delivery5);
+            db.SaveChanges();
+            
+            void AddDeliveryIfNotExists(MyDbContext db, Deliveries delivery)
+            {
+                if (!db.Deliveries.Any(d => d.OrderId == delivery.OrderId && d.SupermarketId == delivery.SupermarketId))
+                {
+                    db.Deliveries.Add(delivery);
+                }
+                
+            }
             
             // Relational entities
             

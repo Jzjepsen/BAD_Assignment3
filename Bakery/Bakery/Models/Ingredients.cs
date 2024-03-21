@@ -10,4 +10,5 @@ public class Ingredients
     public int Quantity { get; set; }
     
     public List<BatchIngredient> BatchIngredients { get; set; }
+    public ICollection<IngredientAllergen> IngredientAllergens{ get; set; }
 }

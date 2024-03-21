@@ -22,6 +22,23 @@ namespace Bakery.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Bakery.Models.Allergen", b =>
+                {
+                    b.Property<int>("AllergenId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AllergenId"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AllergenId");
+
+                    b.ToTable("Allergens");
+                });
+
             modelBuilder.Entity("Bakery.Models.BakingGoodBatch", b =>
                 {
                     b.Property<int>("BakingGoodId")
@@ -122,6 +139,21 @@ namespace Bakery.Migrations
                     b.HasIndex("SupermarketId");
 
                     b.ToTable("Deliveries");
+                });
+
+            modelBuilder.Entity("Bakery.Models.IngredientAllergen", b =>
+                {
+                    b.Property<int>("IngredientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AllergenId")
+                        .HasColumnType("int");
+
+                    b.HasKey("IngredientId", "AllergenId");
+
+                    b.HasIndex("AllergenId");
+
+                    b.ToTable("IngredientAllergens");
                 });
 
             modelBuilder.Entity("Bakery.Models.Ingredients", b =>
@@ -257,6 +289,25 @@ namespace Bakery.Migrations
                     b.Navigation("Supermarket");
                 });
 
+            modelBuilder.Entity("Bakery.Models.IngredientAllergen", b =>
+                {
+                    b.HasOne("Bakery.Models.Allergen", "Allergen")
+                        .WithMany("IngredientAllergens")
+                        .HasForeignKey("AllergenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Bakery.Models.Ingredients", "Ingredient")
+                        .WithMany("IngredientAllergens")
+                        .HasForeignKey("IngredientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Allergen");
+
+                    b.Navigation("Ingredient");
+                });
+
             modelBuilder.Entity("Bakery.Models.OrderBakingGood", b =>
                 {
                     b.HasOne("Bakery.Models.BakingGoods", "BakingGood")
@@ -276,6 +327,11 @@ namespace Bakery.Migrations
                     b.Navigation("Order");
                 });
 
+            modelBuilder.Entity("Bakery.Models.Allergen", b =>
+                {
+                    b.Navigation("IngredientAllergens");
+                });
+
             modelBuilder.Entity("Bakery.Models.BakingGoods", b =>
                 {
                     b.Navigation("BakingGoodBatches");
@@ -293,6 +349,8 @@ namespace Bakery.Migrations
             modelBuilder.Entity("Bakery.Models.Ingredients", b =>
                 {
                     b.Navigation("BatchIngredients");
+
+                    b.Navigation("IngredientAllergens");
                 });
 
             modelBuilder.Entity("Bakery.Models.Orders", b =>
