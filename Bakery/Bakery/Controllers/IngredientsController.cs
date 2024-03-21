@@ -67,7 +67,7 @@ public class IngredientsController : ControllerBase
     }
     
     // C. update ingredient in stock
-    [HttpPut("{id}")]
+    [HttpPut("{id}/update-ingredient")]
     public IActionResult UpdateIngredient(int id, [FromBody] IngredientDto ingredientUpdate)
     {
         var ingredient = _context.Ingredients.Find(id);
@@ -85,7 +85,7 @@ public class IngredientsController : ControllerBase
 
       
     // C. add new ingredient and quantity to the stock
-    [HttpPost]
+    [HttpPost("Add-Ingredient")]
     public IActionResult AddIngredient([FromBody] IngredientDto ingredientDto)
     {
         if (ingredientDto == null || string.IsNullOrWhiteSpace(ingredientDto.Name))
@@ -106,7 +106,7 @@ public class IngredientsController : ControllerBase
     }
    
     // C. Delete ingredient from stock
-    [HttpDelete("{id}")]
+    [HttpDelete("{id}/delete-ingredient")]
     public IActionResult DeleteIngredient(int id)
     {
         var ingredient = _context.Ingredients.Find(id);

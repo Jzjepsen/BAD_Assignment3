@@ -36,11 +36,11 @@ namespace Bakery.Data
             db.Ingredients.Add(ingredient4);
             db.Ingredients.Add(ingredient5);
             
-            var order1 = new Orders { Date = new DateOnly(2023, 1, 1), DeliveryPlace = "Aarhus" };
-            var order2 = new Orders { Date = new DateOnly(2023, 1, 2), DeliveryPlace = "Aarhus" };
-            var order3 = new Orders { Date = new DateOnly(2023, 1, 3), DeliveryPlace = "Aarhus" };
-            var order4 = new Orders { Date = new DateOnly(2023, 1, 4), DeliveryPlace = "Aarhus" };
-            var order5 = new Orders { Date = new DateOnly(2023, 1, 5), DeliveryPlace = "Aarhus" };
+            var order1 = new Orders { Date = "01032024 1030", DeliveryPlace = "Aarhus" };
+            var order2 = new Orders { Date = "01042024 1130", DeliveryPlace = "Aarhus" };
+            var order3 = new Orders { Date = "01052024 1230", DeliveryPlace = "Aarhus" };
+            var order4 = new Orders { Date = "01062024 1330", DeliveryPlace = "Aarhus" };
+            var order5 = new Orders { Date = "01072024 1430", DeliveryPlace = "Aarhus" };
 
             db.Orders.Add(order1);
             db.Orders.Add(order2);
