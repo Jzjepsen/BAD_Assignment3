@@ -66,6 +66,25 @@ public class IngredientsController : ControllerBase
         return Ok(ingredient);
     }
     
+    // C. update ingredient in stock
+    [HttpPut("{id}")]
+    public IActionResult UpdateIngredient(int id, [FromBody] IngredientDto ingredientUpdate)
+    {
+        var ingredient = _context.Ingredients.Find(id);
+        if (ingredient == null)
+        {
+            return NotFound();
+        }
+
+        ingredient.Name = ingredientUpdate.Name ?? ingredient.Name;
+        ingredient.Quantity = ingredientUpdate.Quantity;
+
+        _context.SaveChanges();
+        return NoContent();
+    }
+
+      
+    // C. add new ingredient and quantity to the stock
     [HttpPost]
     public IActionResult AddIngredient([FromBody] IngredientDto ingredientDto)
     {
@@ -85,23 +104,8 @@ public class IngredientsController : ControllerBase
 
         return CreatedAtAction(nameof(GetIngredientStock), new { ingredientName = ingredient.Name }, ingredient);
     }
-    
-    [HttpPut("{id}")]
-    public IActionResult UpdateIngredient(int id, [FromBody] IngredientDto ingredientUpdate)
-    {
-        var ingredient = _context.Ingredients.Find(id);
-        if (ingredient == null)
-        {
-            return NotFound();
-        }
-
-        ingredient.Name = ingredientUpdate.Name ?? ingredient.Name;
-        ingredient.Quantity = ingredientUpdate.Quantity;
-
-        _context.SaveChanges();
-        return NoContent();
-    }
-
+   
+    // C. Delete ingredient from stock
     [HttpDelete("{id}")]
     public IActionResult DeleteIngredient(int id)
     {
@@ -116,5 +120,6 @@ public class IngredientsController : ControllerBase
         return NoContent();
     }
 
+    
 
 }
