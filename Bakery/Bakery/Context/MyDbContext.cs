@@ -18,7 +18,8 @@ public class MyDbContext : DbContext
     internal DbSet<BatchIngredient> BatchIngredients{ get; set; }
     internal DbSet<Allergen> Allergens { get; set; }
     internal DbSet<IngredientAllergen> IngredientAllergens { get; set; }
-
+    internal DbSet<Address> Addresses { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -31,7 +32,7 @@ public class MyDbContext : DbContext
            .WithMany(e => e.BakingGoodBatches)
            .HasForeignKey(e => e.BakingGoodId)
            .OnDelete(DeleteBehavior.Cascade);
-       
+     
        modelBuilder.Entity<BakingGoodBatch>()
            .HasOne(e=>e.Batch)
            .WithMany(e => e.BakingGoodBatches)

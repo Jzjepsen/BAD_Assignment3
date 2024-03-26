@@ -36,7 +36,7 @@ namespace Bakery.Migrations
 
                     b.HasKey("AllergenId");
 
-                    b.ToTable("Allergens");
+                    b.ToTable("Allergens", (string)null);
                 });
 
             modelBuilder.Entity("Bakery.Models.BakingGoodBatch", b =>
@@ -51,7 +51,7 @@ namespace Bakery.Migrations
 
                     b.HasIndex("BatchId");
 
-                    b.ToTable("BakingGoodBatches");
+                    b.ToTable("BakingGoodBatches", (string)null);
                 });
 
             modelBuilder.Entity("Bakery.Models.BakingGoods", b =>
@@ -74,7 +74,7 @@ namespace Bakery.Migrations
 
                     b.HasKey("BakingGoodId");
 
-                    b.ToTable("BakingGoods");
+                    b.ToTable("BakingGoods", (string)null);
                 });
 
             modelBuilder.Entity("Bakery.Models.BatchIngredient", b =>
@@ -89,7 +89,7 @@ namespace Bakery.Migrations
 
                     b.HasIndex("IngredientId");
 
-                    b.ToTable("BatchIngredients");
+                    b.ToTable("BatchIngredients", (string)null);
                 });
 
             modelBuilder.Entity("Bakery.Models.Batches", b =>
@@ -111,7 +111,7 @@ namespace Bakery.Migrations
 
                     b.HasKey("BatchId");
 
-                    b.ToTable("Batches");
+                    b.ToTable("Batches", (string)null);
                 });
 
             modelBuilder.Entity("Bakery.Models.Deliveries", b =>
@@ -138,7 +138,7 @@ namespace Bakery.Migrations
 
                     b.HasIndex("SupermarketId");
 
-                    b.ToTable("Deliveries");
+                    b.ToTable("Deliveries", (string)null);
                 });
 
             modelBuilder.Entity("Bakery.Models.IngredientAllergen", b =>
@@ -153,7 +153,7 @@ namespace Bakery.Migrations
 
                     b.HasIndex("AllergenId");
 
-                    b.ToTable("IngredientAllergens");
+                    b.ToTable("IngredientAllergens", (string)null);
                 });
 
             modelBuilder.Entity("Bakery.Models.Ingredients", b =>
@@ -173,7 +173,7 @@ namespace Bakery.Migrations
 
                     b.HasKey("IngredientId");
 
-                    b.ToTable("Ingredients");
+                    b.ToTable("Ingredients", (string)null);
                 });
 
             modelBuilder.Entity("Bakery.Models.OrderBakingGood", b =>
@@ -188,7 +188,7 @@ namespace Bakery.Migrations
 
                     b.HasIndex("BakingGoodId");
 
-                    b.ToTable("OrderBakingGoods");
+                    b.ToTable("OrderBakingGoods", (string)null);
                 });
 
             modelBuilder.Entity("Bakery.Models.Orders", b =>
@@ -209,7 +209,7 @@ namespace Bakery.Migrations
 
                     b.HasKey("OrderId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("Bakery.Models.Supermarkets", b =>
@@ -230,7 +230,7 @@ namespace Bakery.Migrations
 
                     b.HasKey("SupermarketId");
 
-                    b.ToTable("Supermarkets");
+                    b.ToTable("Supermarkets", (string)null);
                 });
 
             modelBuilder.Entity("Bakery.Models.BakingGoodBatch", b =>

@@ -1,12 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using Bakery.Models;
 
 namespace Bakery.DTOs;
 
 public class OrdersDto
 {
     [Required(ErrorMessage = "Delivery place is required.")]
-    [StringLength(100, ErrorMessage = "Delivery place cannot exceed 100 characters.")]
-    public string DeliveryPlace { get; set; }
+    public List<Address> DeliveryPlace { get; set; }
     
     //RegularExpression validate correct format is DDMMYYYY HHMM
     [Required(ErrorMessage = "Date is required.")]

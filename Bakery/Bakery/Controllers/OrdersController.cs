@@ -3,6 +3,7 @@ using Bakery.Context;
 using Bakery.DTOs;
 using Bakery.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bakery.Controllers;
 
@@ -21,8 +22,9 @@ public class OrdersController : ControllerBase
     public IActionResult GetOrderDetails(int id)
     {
         var order = _context.Orders
+            .Include(o => o.DeliveryPlace) 
             .Where(o => o.OrderId == id)
-            .Select(o => new OrderAddressDateDto
+            .Select(o => new OrdersDto 
             {
                 DeliveryPlace = o.DeliveryPlace,
                 Date = o.Date
@@ -35,6 +37,7 @@ public class OrdersController : ControllerBase
 
         return Ok(order);
     }
+
     
     //query #3 from assignment 2
     [HttpGet("{id}/baking-goods")]
@@ -69,8 +72,18 @@ public class OrdersController : ControllerBase
         }
 
         var deliveries = _context.Deliveries
-            .Where(e => e.OrderId == id)
-            .Select(e => e.TrackId)
+            .Where(d => d.DeliveryOrderId == id)
+            .Select(d => new
+            {
+                TrackId = d.TrackId,
+                Address = d.Location.Select(loc => new 
+                {
+                    Street = loc.Street,
+                    Zip = loc.Zip,
+                    Latitude = loc.Latitude,
+                    Longitude = loc.Longitude
+                }).FirstOrDefault() 
+            })
             .ToList();
 
         return Ok(deliveries);
