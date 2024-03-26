@@ -6,7 +6,10 @@ namespace Bakery.DTOs;
 public class OrdersDto
 {
     [Required(ErrorMessage = "Delivery place is required.")]
-    public List<Address> DeliveryPlace { get; set; }
+    public string Street { get; set; }
+    public int Zip { get; set; }
+    public double Latitude { get; set; }
+    public double Longitude { get; set; }
     
     //RegularExpression validate correct format is DDMMYYYY HHMM
     [Required(ErrorMessage = "Date is required.")]

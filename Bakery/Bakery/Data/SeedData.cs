@@ -31,8 +31,6 @@ namespace Bakery.Data
                     db.Allergens.Add(allergen);
                 }
             }
-
-            db.SaveChanges();
             
             // Seeding ingredients with validation
             AddIngredientIfNotExists(db, new Ingredients { Name = "Flour", Quantity = 100 });
@@ -87,17 +85,40 @@ namespace Bakery.Data
                 }
             }
             
-            AddOrderIfNotExists(db, new Orders { Date = "01022024 1030"});
-            AddOrderIfNotExists(db, new Orders { Date = "01032024 1130"});
-            AddOrderIfNotExists(db, new Orders { Date = "01042024 1230"});
-            AddOrderIfNotExists(db, new Orders { Date = "01052024 1330"});
-            AddOrderIfNotExists(db, new Orders { Date = "01062024 1430"});
+            //addresses
+            var address1 = new Address{Street = "Thorvaldsensgade", Zip = 8600, Latitude = 55.6761, Longitude = 12.5683};
+            var address2 = new Address{Street = "Nygade", Zip = 8600, Latitude = 54.6761, Longitude = 11.5683};
+            var address3 = new Address{Street = "Nørregade", Zip = 8000, Latitude = 53.6761, Longitude = 13.5683};
+            var address4 = new Address{Street = "Bagerivej", Zip = 8200, Latitude = 51.6761, Longitude = 11.5683};
+            var address5 = new Address{Street = "Lærkevej", Zip = 8210, Latitude = 54.6761, Longitude = 11.5443};
+            
+            addAddressIfNotExists(db, address1);
+            addAddressIfNotExists(db, address2);
+            addAddressIfNotExists(db, address3);
+            addAddressIfNotExists(db, address4);
+            addAddressIfNotExists(db, address5);
+
+            void addAddressIfNotExists(MyDbContext db, Address address)
+            {
+                // Checking if an address already exists based on Street and Zip
+                if (!db.Addresses.Any(a => a.Street == address.Street && a.Zip == address.Zip))
+                {
+                    db.Addresses.Add(address);
+                }
+            }
+            db.SaveChanges();
+            
+            AddOrderIfNotExists(db, new Orders { Date = "01022024 1030", AddressId = 1});
+            AddOrderIfNotExists(db, new Orders { Date = "01032024 1130", AddressId = 2});
+            AddOrderIfNotExists(db, new Orders { Date = "01042024 1230", AddressId = 3});
+            AddOrderIfNotExists(db, new Orders { Date = "01052024 1330", AddressId = 4});
+            AddOrderIfNotExists(db, new Orders { Date = "01062024 1430", AddressId = 5});
 
             db.SaveChanges();
             
             void AddOrderIfNotExists(MyDbContext db, Orders order)
             {
-                if (!db.Orders.Any(o => o.Date == order.Date && o.DeliveryPlace == order.DeliveryPlace))
+                if (!db.Orders.Any(o => o.Date == order.Date && o.AddressId == order.AddressId))
                 {
                     db.Orders.Add(order);
                 }
@@ -130,56 +151,12 @@ namespace Bakery.Data
             
             db.SaveChanges();
             
-            // Seeding deliveries with validation
-            AddDeliveryIfNotExists(db, new Deliveries { DeliveryOrderId = 1, SupermarketId = 1 });
-            AddDeliveryIfNotExists(db, new Deliveries { DeliveryOrderId = 2, SupermarketId = 2 });
-            AddDeliveryIfNotExists(db, new Deliveries { DeliveryOrderId = 3, SupermarketId = 3 });
-            AddDeliveryIfNotExists(db, new Deliveries { DeliveryOrderId = 4, SupermarketId = 4 });
-            AddDeliveryIfNotExists(db, new Deliveries { DeliveryOrderId = 5, SupermarketId = 5 });
-
-            db.SaveChanges();
-            
-            void AddDeliveryIfNotExists(MyDbContext db, Deliveries delivery)
-            {
-                if (!db.Deliveries.Any(d => d.DeliveryOrderId == delivery.DeliveryOrderId && d.SupermarketId == delivery.SupermarketId))
-                {
-                    db.Deliveries.Add(delivery);
-                }
-                
-            }
-            
-            
-            //addresses
-            var address1 = new Address{Street = "Thorvaldsensgade", Zip = "8600", Latitude = 55.6761, Longitude = 12.5683, DeliveryId = 1};
-            var address2 = new Address{Street = "Nygade", Zip = "8600", Latitude = 54.6761, Longitude = 11.5683, DeliveryId = 2};
-            var address3 = new Address{Street = "Nørregade", Zip = "8000", Latitude = 53.6761, Longitude = 13.5683, DeliveryId = 3};
-            var address4 = new Address{Street = "Bagerivej", Zip = "8200", Latitude = 51.6761, Longitude = 11.5683, DeliveryId = 4};
-            var address5 = new Address{Street = "Lærkevej", Zip = "8210", Latitude = 54.6761, Longitude = 11.5443, DeliveryId = 5};
-
-            
-            addAddressIfNotExists(db, address1);
-            addAddressIfNotExists(db, address2);
-            addAddressIfNotExists(db, address3);
-            addAddressIfNotExists(db, address4);
-            addAddressIfNotExists(db, address5);
-            db.SaveChanges();
-
-            void addAddressIfNotExists(MyDbContext db, Address address)
-            {
-                // Checking if an address already exists based on Street and Zip
-                if (!db.Addresses.Any(a => a.Street == address.Street && a.Zip == address.Zip))
-                {
-                    db.Addresses.Add(address);
-                }
-            }
-            
-            
             // Supermarkets
-            AddSupermarketIfNotExists(db, new Supermarkets { Name = "Netto", AddressId = address1.AddressId});
-            AddSupermarketIfNotExists(db, new Supermarkets { Name = "Netto", AddressId = address2.AddressId });
-            AddSupermarketIfNotExists(db, new Supermarkets { Name = "Meny", AddressId = address3.AddressId });
-            AddSupermarketIfNotExists(db, new Supermarkets { Name = "Rema 1000", AddressId = address4.AddressId });
-            AddSupermarketIfNotExists(db, new Supermarkets { Name = "Føtex", AddressId = address5.AddressId});
+            AddSupermarketIfNotExists(db, new Supermarkets { Name = "Netto", AddressId = 1});
+            AddSupermarketIfNotExists(db, new Supermarkets { Name = "Netto", AddressId = 2 });
+            AddSupermarketIfNotExists(db, new Supermarkets { Name = "Meny", AddressId = 3 });
+            AddSupermarketIfNotExists(db, new Supermarkets { Name = "Rema 1000", AddressId = 4 });
+            AddSupermarketIfNotExists(db, new Supermarkets { Name = "Føtex", AddressId = 5});
             db.SaveChanges();
 
             void AddSupermarketIfNotExists(MyDbContext db, Supermarkets supermarket)
@@ -189,6 +166,28 @@ namespace Bakery.Data
                     db.Supermarkets.Add(supermarket);
                 }
             }
+            
+            // Seeding deliveries with validation
+            AddDeliveryIfNotExists(db, new Deliveries { OrderId = 1, SupermarketId = 1, AddressId = 1});
+            AddDeliveryIfNotExists(db, new Deliveries { OrderId = 2, SupermarketId = 2, AddressId = 2});
+            AddDeliveryIfNotExists(db, new Deliveries { OrderId = 3, SupermarketId = 3, AddressId = 3});
+            AddDeliveryIfNotExists(db, new Deliveries { OrderId = 4, SupermarketId = 4, AddressId = 4});
+            AddDeliveryIfNotExists(db, new Deliveries { OrderId = 5, SupermarketId = 5, AddressId = 5});
+
+            db.SaveChanges();
+            
+            void AddDeliveryIfNotExists(MyDbContext db, Deliveries delivery)
+            {
+                if (!db.Deliveries.Any(d => d.OrderId == delivery.OrderId && d.SupermarketId == delivery.SupermarketId && d.AddressId == delivery.AddressId))
+                {
+                    db.Deliveries.Add(delivery);
+                }
+                
+            }
+            
+            
+            
+
             
             // Relational entities
             

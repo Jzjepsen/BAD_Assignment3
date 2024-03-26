@@ -85,5 +85,19 @@ public class MyDbContext : DbContext
            .HasOne(ia => ia.Allergen)
            .WithMany(a => a.IngredientAllergens)
            .HasForeignKey(ia => ia.AllergenId);
+       
+       //
+       modelBuilder.Entity<Orders>()
+           .HasOne(o => o.Address)
+           .WithMany(a => a.Orders)
+           .HasForeignKey(o => o.AddressId)
+           .OnDelete(DeleteBehavior.Restrict);
+       
+       modelBuilder.Entity<Supermarkets>()
+           .HasOne(s => s.Address)
+           .WithOne(a => a.Supermarket)
+           .HasForeignKey<Supermarkets>(s => s.AddressId)
+           .OnDelete(DeleteBehavior.Restrict);
+       
     }
 }

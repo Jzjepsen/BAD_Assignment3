@@ -22,11 +22,12 @@ public class OrdersController : ControllerBase
     public IActionResult GetOrderDetails(int id)
     {
         var order = _context.Orders
-            .Include(o => o.DeliveryPlace) 
+            .Include(o => o.Address) 
             .Where(o => o.OrderId == id)
             .Select(o => new OrdersDto 
             {
-                DeliveryPlace = o.DeliveryPlace,
+                Street = o.Address.Street,
+                Zip = o.Address.Zip,
                 Date = o.Date
             })
             .FirstOrDefault();
@@ -72,18 +73,14 @@ public class OrdersController : ControllerBase
         }
 
         var deliveries = _context.Deliveries
-            .Where(d => d.DeliveryOrderId == id)
-            .Select(d => new
+            .Where(d => d.OrderId == id)
+            .Select(d => new DeliveriesDto
             {
                 TrackId = d.TrackId,
-                Address = d.Location.Select(loc => new 
-                {
-                    Street = loc.Street,
-                    Zip = loc.Zip,
-                    Latitude = loc.Latitude,
-                    Longitude = loc.Longitude
-                }).FirstOrDefault() 
-            })
+                Street = d.Address.Street,
+                Zip = d.Address.Zip,
+                Longitude = d.Address.Longitude,
+                Latitude = d.Address.Latitude})
             .ToList();
 
         return Ok(deliveries);
@@ -125,7 +122,7 @@ public class OrdersController : ControllerBase
         // Step 3: Create a new Orders entity and map the properties from the DTO
         var newOrder = new Orders
         {
-            DeliveryPlace = ordersDto.DeliveryPlace,
+            Address = new Address{ Street = ordersDto.Street, Zip = ordersDto.Zip, Longitude = ordersDto.Longitude, Latitude = ordersDto.Latitude},
             Date = ordersDto.Date,
         };
 

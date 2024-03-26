@@ -11,6 +11,8 @@ public class Orders
     
     public List<OrderBakingGood> OrderBakingGoods { get; set; }
     public List<Deliveries> Deliveries { get; set; }
-    public List<Address> DeliveryPlace { get; set; }
+    
+    public int AddressId { get; set; } // FK
+    public Address Address { get; set; } // Navigation property
 }
 

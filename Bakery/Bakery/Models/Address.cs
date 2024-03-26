@@ -5,14 +5,13 @@ namespace Bakery.Models;
 public class Address
 {
     [Key] public int AddressId { get; set; }
-    public string Zip { get; set; }
+    public int Zip { get; set; }
     public string Street { get; set; }
     public double Latitude { get; set; }
     public double Longitude { get; set; }
     
-    //foreign key for Deliveries
-    public int DeliveryId { get; set; }
-    public Deliveries Deliveries { get; set; }
+    public List<Orders> Orders { get; set; }
+    public List<Deliveries> Deliveries { get; set; }
 
-    
+    public Supermarkets Supermarket { get; set; }
 }
