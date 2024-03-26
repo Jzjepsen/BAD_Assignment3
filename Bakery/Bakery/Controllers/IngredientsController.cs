@@ -134,7 +134,7 @@ public class IngredientsController : ControllerBase
 
    
     // C. Delete ingredient from stock
-    [HttpDelete("{id}")]
+    [HttpDelete("{id}/delete-ingredient")]
     public IActionResult DeleteIngredient(int id)
     {
         var ingredient = _context.Ingredients.Find(id);

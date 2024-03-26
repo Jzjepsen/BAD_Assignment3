@@ -1,3 +1,4 @@
+using System.Globalization;
 using Bakery.Context;
 using Bakery.DTOs;
 using Bakery.Models;
@@ -99,6 +100,13 @@ public class OrdersController : ControllerBase
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
+        }
+        
+        // Check if the date is a valid date
+        DateTime validDate;
+        if (!DateTime.TryParseExact(ordersDto.Date,"ddMMyyyy HHmm",CultureInfo.InvariantCulture, DateTimeStyles.None ,out validDate))
+        {
+            return BadRequest("Invalid date");
         }
 
         // Step 3: Create a new Orders entity and map the properties from the DTO
