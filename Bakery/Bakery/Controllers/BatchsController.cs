@@ -2,6 +2,8 @@ using Bakery.Context;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bakery.Controllers;
+[ApiController]
+[Route("[controller]")]
 
 public class BatchsController : ControllerBase
 {
