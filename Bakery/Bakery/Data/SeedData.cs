@@ -102,11 +102,11 @@ namespace Bakery.Data
                 }
             }
             
-            AddOrderIfNotExists(db, new Orders { Date = new DateOnly(2023, 1, 1), DeliveryPlace = "Aarhus" });
-            AddOrderIfNotExists(db, new Orders { Date = new DateOnly(2023, 1, 2), DeliveryPlace = "Aarhus" });
-            AddOrderIfNotExists(db, new Orders { Date = new DateOnly(2023, 1, 3), DeliveryPlace = "Aarhus" });
-            AddOrderIfNotExists(db, new Orders { Date = new DateOnly(2023, 1, 4), DeliveryPlace = "Aarhus" });
-            AddOrderIfNotExists(db, new Orders { Date = new DateOnly(2023, 1, 5), DeliveryPlace = "Aarhus" });
+            AddOrderIfNotExists(db, new Orders { Date = "01022024 1030", DeliveryPlace = "Aarhus" });
+            AddOrderIfNotExists(db, new Orders { Date = "01032024 1130", DeliveryPlace = "Aarhus" });
+            AddOrderIfNotExists(db, new Orders { Date = "01042024 1230", DeliveryPlace = "Aarhus" });
+            AddOrderIfNotExists(db, new Orders { Date = "01052024 1330", DeliveryPlace = "Aarhus" });
+            AddOrderIfNotExists(db, new Orders { Date = "01062024 1430", DeliveryPlace = "Aarhus" });
 
             db.SaveChanges();
             
