@@ -6,12 +6,12 @@ namespace Bakery.Controllers;
 public class BatchsController : ControllerBase
 {
     private readonly MyDbContext _context;
-    
+
     public BatchsController(MyDbContext context)
     {
         _context = context;
     }
-    
+
     //query #4 from assignment 2
     [HttpGet("{id}/ingredients")]
     public IActionResult GetIngredientsInBatch(int id)
@@ -27,15 +27,18 @@ public class BatchsController : ControllerBase
             .Select(e => new IngredientDto
             {
                 Name = e.Ingredient.Name,
-                Quantity = e.Ingredient.Quantity
+                Quantity = e.Ingredient.Quantity,
+                Allergens = e.Ingredient.IngredientAllergens
+                    .Select(i=> i.Allergen.Name)
+                    .ToList()
             })
             .ToList();
 
         return Ok(ingredients);
     }
-    
+
     //query #6 from assignment 2
-    [HttpGet("average-delay")]
+    [HttpGet("averageDelay")]
     public IActionResult GetAverageDelay()
     {
         var batches = _context.Batches.ToList();

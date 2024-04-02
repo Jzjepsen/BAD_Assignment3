@@ -4,6 +4,6 @@ namespace Bakery.DTOs;
 
 public class OrderAddressDateDto
 {
-    public Address DeliveryPlace { get; set; }
-    public string Date { get; set; }
+    public Address DeliveryPlace { get; set; } = new Address();
+    public string Date { get; set; } = string.Empty;
 }
