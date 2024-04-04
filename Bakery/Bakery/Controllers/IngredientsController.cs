@@ -36,18 +36,28 @@ public class IngredientsController : ControllerBase
     [HttpGet("{id}")]
     public IActionResult GetIngredientById(int id)
     {
-        var ingredient = _context.Ingredients.Find(id);
+        var ingredient = _context.Ingredients
+            .Include(i => i.IngredientAllergens)
+            .ThenInclude(ia => ia.Allergen)
+            .FirstOrDefault(i => i.IngredientId == id);
+
         if (ingredient == null)
         {
             return NotFound();
         }
-        var ingredientQuantityDto = new IngredientDto
+
+        var allergens = ingredient.IngredientAllergens
+            .Select(ia => ia.Allergen.Name)
+            .ToList();
+
+        var ingredientDto = new IngredientDto
         {
             Name = ingredient.Name,
-            Quantity = ingredient.Quantity
+            Quantity = ingredient.Quantity,
+            Allergens = allergens
         };
 
-        return Ok(ingredientQuantityDto);
+        return Ok(ingredientDto);
     }
 
 
