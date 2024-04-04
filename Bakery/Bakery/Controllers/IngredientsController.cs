@@ -67,12 +67,18 @@ public class IngredientsController : ControllerBase
     }
 
     // C. update ingredient in stock
-    [HttpPut("{name}")]
+    [HttpPut("update-quantity-by-name/{name}")]
     public IActionResult UpdateIngredient(string name, [FromBody] IngredientQuantityDto ingredientDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
+        }
+
+        // Validate that the new quantity is non-negative
+        if (ingredientDto.Quantity < 0)
+        {
+            return BadRequest("Quantity must be non-negative.");
         }
 
         // Find the ingredient by name using EF.Functions.Like for case-insensitive comparison
@@ -81,19 +87,19 @@ public class IngredientsController : ControllerBase
 
         if (ingredient == null)
         {
-            // If the ingredient does not exist return NotFound
+            // If the ingredient does not exist, consider creating a new one or return NotFound
+            // For this scenario, let's return a NotFound response
             return NotFound($"Ingredient with name {name} not found.");
         }
 
-        // If found, update the existing ingredient's quantity by adding the new quantity to it
-        ingredient.Quantity += ingredientDto.Quantity;
+        // If found, update the existing ingredient's quantity to the new value
+        ingredient.Quantity = ingredientDto.Quantity;
 
         _context.SaveChanges();
-        return Ok($"Ingredient {name} stock updated successfully.");
+        return NoContent();
     }
 
-
-
+    
 
     // C. Add new ingredient and quantity to the stock
     [HttpPost]
