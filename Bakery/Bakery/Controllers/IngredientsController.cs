@@ -15,10 +15,10 @@ public class IngredientsController : ControllerBase
     {
         _context = context;
     }
-  
-    
+
+
     //minimum query #1 from assignment 2
-    [HttpGet("all-quantities")]
+    [HttpGet("ingredients")]
     public IActionResult GetAllIngredientsWithQuantities()
     {
         var ingredients = _context.Ingredients
@@ -32,7 +32,7 @@ public class IngredientsController : ControllerBase
         return Ok(ingredients);
     }
 
-    
+
     [HttpGet("{id}")]
     public IActionResult GetIngredientById(int id)
     {
@@ -50,8 +50,8 @@ public class IngredientsController : ControllerBase
         return Ok(ingredientQuantityDto);
     }
 
-    
-    [HttpGet("stock/{ingredientName}")] // Specify a unique route
+
+    [HttpGet("stock/{ingredientName}")]
     public IActionResult GetIngredientStock(string ingredientName)
     {
         var ingredient = _context.Ingredients
@@ -65,9 +65,9 @@ public class IngredientsController : ControllerBase
 
         return Ok(ingredient);
     }
-    
+
     // C. update ingredient in stock
-    [HttpPut("update-quantity-by-name/{name}")]
+    [HttpPut("{name}")]
     public IActionResult UpdateIngredient(string name, [FromBody] IngredientQuantityDto ingredientDto)
     {
         if (!ModelState.IsValid)
@@ -81,8 +81,7 @@ public class IngredientsController : ControllerBase
 
         if (ingredient == null)
         {
-            // If the ingredient does not exist, consider creating a new one or return NotFound
-            // For this scenario, let's return a NotFound response
+            // If the ingredient does not exist return NotFound
             return NotFound($"Ingredient with name {name} not found.");
         }
 
@@ -90,12 +89,12 @@ public class IngredientsController : ControllerBase
         ingredient.Quantity += ingredientDto.Quantity;
 
         _context.SaveChanges();
-        return NoContent();
+        return Ok($"Ingredient {name} stock updated successfully.");
     }
 
 
 
-      
+
     // C. Add new ingredient and quantity to the stock
     [HttpPost]
     public IActionResult AddIngredient([FromBody] IngredientDto ingredientDto)
@@ -124,7 +123,7 @@ public class IngredientsController : ControllerBase
 
         var newIngredient = new Ingredients
         {
-            Name = ingredientDto.Name, 
+            Name = ingredientDto.Name,
             Quantity = ingredientDto.Quantity
         };
         _context.Ingredients.Add(newIngredient);
@@ -132,9 +131,9 @@ public class IngredientsController : ControllerBase
         return CreatedAtAction(nameof(GetIngredientStock), new { ingredientName = newIngredient.Name }, newIngredient);
     }
 
-   
+
     // C. Delete ingredient from stock
-    [HttpDelete("{id}/delete-ingredient")]
+    [HttpDelete("{id}")]
     public IActionResult DeleteIngredient(int id)
     {
         var ingredient = _context.Ingredients.Find(id);
@@ -145,9 +144,9 @@ public class IngredientsController : ControllerBase
 
         _context.Ingredients.Remove(ingredient);
         _context.SaveChanges();
-        return NoContent();
+        return Ok($"Ingredient {ingredient} stock deleted successfully.");
     }
 
-    
+
 
 }
