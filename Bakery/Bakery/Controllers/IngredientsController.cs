@@ -32,32 +32,37 @@ public class IngredientsController : ControllerBase
         return Ok(ingredients);
     }
 
-
-    [HttpGet("{id}")]
-    public IActionResult GetIngredientById(int id)
+    //minimum query #4 from assignment 2
+    [HttpGet("batch/{batchId}")]
+    public IActionResult GetIngredientsForBatch(int batchId)
     {
-        var ingredient = _context.Ingredients
-            .Include(i => i.IngredientAllergens)
+        var batchIngredients = _context.BatchIngredients
+            .Where(bi => bi.BatchId == batchId)
+            .Include(bi => bi.Ingredient)
+            .ThenInclude(i => i.IngredientAllergens)
             .ThenInclude(ia => ia.Allergen)
-            .FirstOrDefault(i => i.IngredientId == id);
-
-        if (ingredient == null)
-        {
-            return NotFound();
-        }
-
-        var allergens = ingredient.IngredientAllergens
-            .Select(ia => ia.Allergen.Name)
             .ToList();
 
-        var ingredientDto = new IngredientDto
+        if (batchIngredients == null || !batchIngredients.Any())
         {
-            Name = ingredient.Name,
-            Quantity = ingredient.Quantity,
-            Allergens = allergens
-        };
+            return NotFound("No ingredients found for the batch.");
+        }
 
-        return Ok(ingredientDto);
+        var ingredientDtos = batchIngredients.Select(bi =>
+        {
+            var allergens = bi.Ingredient.IngredientAllergens
+                .Select(ia => ia.Allergen.Name)
+                .ToList();
+
+            return new IngredientDto
+            {
+                Name = bi.Ingredient.Name,
+                Quantity = bi.Ingredient.Quantity,
+                Allergens = allergens
+            };
+        }).ToList();
+
+        return Ok(ingredientDtos);
     }
 
 
@@ -106,7 +111,7 @@ public class IngredientsController : ControllerBase
         ingredient.Quantity = ingredientDto.Quantity;
 
         _context.SaveChanges();
-        return NoContent();
+        return Ok(ingredientDto);
     }
 
     
