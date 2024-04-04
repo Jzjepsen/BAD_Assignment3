@@ -118,7 +118,7 @@ public class IngredientsController : ControllerBase
 
     // C. Add new ingredient and quantity to the stock
     [HttpPost]
-    public IActionResult AddIngredient([FromBody] IngredientDto ingredientDto)
+    public IActionResult AddIngredient([FromBody] IngredientNameQuantityDto ingredientDto)
     {
         if (!ModelState.IsValid)
         {
@@ -149,7 +149,15 @@ public class IngredientsController : ControllerBase
         };
         _context.Ingredients.Add(newIngredient);
         _context.SaveChanges();
-        return CreatedAtAction(nameof(GetIngredientStock), new { ingredientName = newIngredient.Name }, newIngredient);
+
+        // Create a response DTO excluding BatchIngredients and IngredientAllergens
+        var responseDto = new IngredientNameQuantityDto
+        {
+            Name = newIngredient.Name,
+            Quantity = newIngredient.Quantity
+        };
+
+        return CreatedAtAction(nameof(GetIngredientStock), new { ingredientName = responseDto.Name }, responseDto);
     }
 
 

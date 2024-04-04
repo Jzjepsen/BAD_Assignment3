@@ -105,39 +105,4 @@ public class OrdersController : ControllerBase
 
         return Ok(bakingGoods);
     }
-
-    [HttpPost]
-    public IActionResult CreateNewOrder([FromBody] OrdersDto ordersDto)
-    {
-        // Validate the received DTO
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        // Checking if the date is a valid date
-        DateTime validDate;
-        if (!DateTime.TryParseExact(ordersDto.Date, "ddMMyyyy HHmm", CultureInfo.InvariantCulture, DateTimeStyles.None, out validDate))
-        {
-            return BadRequest("Invalid date");
-        }
-
-        // Create a new Orders entity and map the properties from the DTO
-        var newOrder = new Orders
-        {
-            Address = new Address { Street = ordersDto.Street, Zip = ordersDto.Zip, Longitude = ordersDto.Longitude, Latitude = ordersDto.Latitude },
-            Date = ordersDto.Date,
-        };
-
-        // Add the new entity to the Orders DbSet
-        _context.Orders.Add(newOrder);
-
-        // Save changes to the database
-        _context.SaveChanges();
-
-        // Return a response
-        // Using nameof(GetOrderDetails) to redirect to the details of the newly created order
-        // Assuming GetOrderDetails is a suitable endpoint to show the order's details
-        return CreatedAtAction(nameof(GetOrderDetails), new { id = newOrder.OrderId }, newOrder);
-    }
 }
