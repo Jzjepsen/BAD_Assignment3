@@ -25,7 +25,10 @@ public class IngredientsController : ControllerBase
             .Select(i => new IngredientDto
             {
                 Name = i.Name,
-                Quantity = i.Quantity
+                Quantity = i.Quantity,
+                Allergens = i.IngredientAllergens
+                    .Select(ia => ia.Allergen.Name)
+                    .ToList()
             })
             .ToList();
 
